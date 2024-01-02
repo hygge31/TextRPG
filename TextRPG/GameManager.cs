@@ -243,7 +243,7 @@ namespace TextRPG
             string select = Console.ReadLine();
             if(select == "1")
             {
-
+                EquipManagement();
             }
             else if(select =="0")
             {
@@ -257,6 +257,118 @@ namespace TextRPG
             }
         }
 
+
+        void EquipManagement()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("인벤토리;");
+            Console.ResetColor();
+            Console.WriteLine("보유중인 아이템을 관리할 수 있습니다.");
+
+            Console.WriteLine("[아이템 목록]");
+            List<object> list = new List<object>();
+            int num = 1;
+            string equipStr = "[E] ";
+            foreach (Object item in player.inventory)
+            {
+                if (item is EquipItem)
+                {
+                    EquipItem currentItem = (EquipItem)item;
+                    if (currentItem.category == ItemCategory.Weapon)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(num+".");
+                        Console.ResetColor();
+                        Console.Write(currentItem.name + "\t");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(" | ");
+                        Console.ResetColor();
+                        Console.Write("공격력 ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("+");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.Write(currentItem.damage);
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(" | ");
+                        Console.ResetColor();
+                        Console.Write(currentItem.information);
+                        Console.WriteLine();
+                        list.Add(currentItem);
+                        num++;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(num+".");
+                        Console.ResetColor();
+                        Console.Write(currentItem.name + "\t");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(" | ");
+                        Console.ResetColor();
+                        Console.Write("방어력 ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("+");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.Write(currentItem.armor);
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(" | ");
+                        Console.ResetColor();
+                        Console.Write(currentItem.information);
+                        Console.WriteLine();
+                        list.Add(currentItem);
+                        num++;
+                    }
+
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
+            NextActionMessage();
+            string select = Console.ReadLine();
+            
+            if(select != "0" && int.TryParse(select,out int idx))
+            {
+                if(idx-1 < list.Count)
+                {
+                    EquipItem currentItem = (EquipItem)list[idx-1];
+                    int stringIdx = currentItem.name.ToString().IndexOf(equipStr);
+                    Console.Write(stringIdx);
+
+                    if (stringIdx == -1)
+                    {
+                        currentItem.name.Insert(0, equipStr);
+                        player.IncreaseDamageAndArmor(currentItem.damage, currentItem.armor);
+                    }
+                    else
+                    {
+                        currentItem.name.Remove(stringIdx, equipStr.Length);
+                        player.IncreaseDamageAndArmor(-currentItem.damage, -currentItem.armor);
+                    }
+                    Console.Clear();
+                    EquipManagement();
+                    
+                }
+
+            }else if (select == "0")
+            {
+                Console.Clear();
+                EquipManagement();
+            }
+            else
+            {
+                Console.Clear();
+                WrongInput();
+                EquipManagement();
+            }
+
+
+        }
 
    //     void ShowMyEquipmentMenu()
    //     {

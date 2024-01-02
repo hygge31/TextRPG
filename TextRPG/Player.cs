@@ -11,6 +11,7 @@ namespace TextRPG
         public float attackDamge;
         public float armor;
         public int increaseInDamage;
+        public int increaseInArmor;
 
         public EquipItem?[] equipment = new EquipItem?[5]; //머리,갑옷, 바지, 장갑 , 신발
         public EquipItem?[] weaponEqu = new EquipItem?[2]; // 무기, 방패
@@ -109,9 +110,12 @@ namespace TextRPG
             }
 
 
+        }
 
-
-
+        public void IncreaseDamageAndArmor(int damage,int armor)
+        {
+            increaseInDamage += damage;
+            increaseInArmor += armor;
         }
 
 
