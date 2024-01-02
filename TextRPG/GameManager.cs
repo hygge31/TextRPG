@@ -36,7 +36,7 @@ namespace TextRPG
 			//클래스 선택
 
 
-            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.");
+            Console.WriteLine("이곳에 온걸 환영하네, \n던전에 들어가기 전에 이곳에서 준비하고 가시게나.\n\n");
 
 			while (gameState == GameState.Play)
 			{
@@ -74,7 +74,6 @@ namespace TextRPG
         string MainMenu()
         {
             Console.ResetColor();
-
             Console.WriteLine("1. 상태 보기");
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine("3. 상점");
@@ -100,9 +99,13 @@ namespace TextRPG
 
         void StateMenu()
 		{
-			Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
 			Console.WriteLine("상태 보기");
-			Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.ResetColor();
 			string level = "";
 			if(player.level < 10)
 			{
@@ -123,13 +126,43 @@ namespace TextRPG
 
             Console.Write("Damage\t: ");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine(player.attackDamge);
+            Console.Write(player.attackDamge);
 			Console.ResetColor();
+            if(player.increaseInDamage != 0)
+            {
+                Console.Write(" (");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("+");
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write(player.increaseInDamage);
+                Console.ResetColor();
+                Console.Write(")\n");
+            }
+            else
+            {
+                Console.WriteLine();
+            }
 
             Console.Write("Armor\t: ");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine(player.armor);
+            Console.Write(player.armor);
             Console.ResetColor();
+            if (player.increaseInArmor != 0)
+            {
+                Console.Write(" (");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("+");
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write(player.increaseInArmor);
+                Console.ResetColor();
+                Console.Write(")\n");
+            }
+            else
+            {
+                Console.WriteLine();
+            }
 
             Console.Write("Health\t: ");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -161,7 +194,8 @@ namespace TextRPG
 			}
         }
 
-		void InventoryMenu()
+        //---------------------------------------------------------------------------------------------------------------------Inventory
+        void InventoryMenu()
 		{
             ShowMyEquipmentMenu();
 			
@@ -170,12 +204,15 @@ namespace TextRPG
 
 		void ShowMyEquipmentMenu()
 		{
+            Console.WriteLine();
+            Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("인벤토리;");
             Console.ResetColor();
             Console.WriteLine("보유중인 아이템을 관리할 수 있습니다.");
-
-			Console.WriteLine("[아이템 목록]");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("[아이템 목록]");
 			ShowEquipment();
 
         }
@@ -243,6 +280,7 @@ namespace TextRPG
             string select = Console.ReadLine();
             if(select == "1")
             {
+                Console.Clear();
                 EquipManagement();
             }
             else if(select =="0")
@@ -260,12 +298,14 @@ namespace TextRPG
 
         void EquipManagement()
         {
-            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("인벤토리;");
             Console.ResetColor();
             Console.WriteLine("보유중인 아이템을 관리할 수 있습니다.");
-
+            Console.WriteLine();
+            Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
             List<object> list = new List<object>();
             int num = 1;
@@ -332,9 +372,9 @@ namespace TextRPG
             NextActionMessage();
             string select = Console.ReadLine();
             
-            if(select != "0" && int.TryParse(select,out int idx))
+            if(select != "0")
             {
-                if(idx-1 < list.Count)
+                if(int.TryParse(select,out int idx) && idx-1 < list.Count)
                 {
                     EquipItem currentItem = (EquipItem)list[idx-1];
                     int stringIdx = currentItem.name.ToString().IndexOf(equipStr);
@@ -352,20 +392,20 @@ namespace TextRPG
                     }
                     Console.Clear();
                     EquipManagement();
-                    
-                }
 
-            }else if (select == "0")
+                }
+                else
+                {
+                    Console.Clear();
+                    WrongInput();
+                    EquipManagement();
+                }
+            }else
             {
                 Console.Clear();
-                EquipManagement();
+                ShowMyEquipmentMenu();
             }
-            else
-            {
-                Console.Clear();
-                WrongInput();
-                EquipManagement();
-            }
+          
 
 
         }
@@ -474,6 +514,7 @@ namespace TextRPG
 				InventoryMenu();
             }
         }
+        //---------------------------------------------------------------------------------------------------------------------Inventory
 
         //----------------------------------------------------------------------------Menu
 
