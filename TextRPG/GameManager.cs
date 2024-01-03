@@ -1130,24 +1130,24 @@ namespace TextRPG
         }
 
 
-		void SelectClassMessage()
-		{
-            Console.WriteLine("클래스를 선택해 주세요.");
-            Console.WriteLine("1. Warrior ");
-            string num = Console.ReadLine();
-            if (num == "1")
-			{
-				player = new Player();
-				isSelectClass = true;
+		//void SelectClassMessage()
+		//{
+  //          Console.WriteLine("클래스를 선택해 주세요.");
+  //          Console.WriteLine("1. Warrior ");
+  //          string num = Console.ReadLine();
+  //          if (num == "1")
+		//	{
+		//		player = new Player();
+		//		isSelectClass = true;
 
 
-            }
-			else
-			{
-                SelectClassMessage();
-			}
+  //          }
+		//	else
+		//	{
+  //              SelectClassMessage();
+		//	}
 
-        }
+  //      }
 
 
         void WrongInput()
