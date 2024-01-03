@@ -394,37 +394,58 @@ namespace TextRPG
                 if(int.TryParse(select,out int idx) && idx-1 < player.inventory.Count)
                 {
                     EquipItem currentItem = (EquipItem)player.inventory[idx-1];
-                    int stringIdx = currentItem.name.ToString().IndexOf(equipStr);
-                    Console.Write(stringIdx);
 
-                    if (stringIdx == -1)
+                    if (currentItem.category == ItemCategory.Weapon)
                     {
-                        if (player.equipment[0]== null)
+                        int stringIdx = currentItem.name.ToString().IndexOf(equipStr);
+
+                        if (stringIdx == -1)
                         {
-                            currentItem.Equipped();
-                            player.IncreaseDamageAndArmor(currentItem.damage, currentItem.armor);
-                            player.equipment[0] = currentItem;
+                            if (player.weaponEqu[0] == null)
+                            {
+                                currentItem.Equipped();
+                                player.inventory[idx - 1] = currentItem;
+                                player.IncreaseDamageAndArmor(currentItem.damage, currentItem.armor);
+                                player.weaponEqu[0] = currentItem;
+                            }
+                            else
+                            {
+                                EquipItem? equipItem = player.weaponEqu[0];
+                                for(int i = 0; i < player.inventory.Count; i++)
+                                {
+                                    if(player.inventory[i] is EquipItem)
+                                    {
+                                        EquipItem item = (EquipItem)player.inventory[i];
+                                        if(item.name == equipItem?.name)
+                                        {
+                                            EquipItem newItem = item;
+                                            newItem.Equipped();
+                                            player.inventory[i] = newItem;
+
+                                            
+                                            player.IncreaseDamageAndArmor(-equipItem.Value.damage, -equipItem.Value.armor);
+
+                                        }
+                                    }
+                                }
+                                currentItem.Equipped();
+                                player.inventory[idx - 1] = currentItem;
+                                player.IncreaseDamageAndArmor(currentItem.damage, currentItem.armor);
+                                player.weaponEqu[0] = currentItem;
+
+                            }
+
                         }
                         else
                         {
-                            EquipItem? equipItem = player.equipment[0];
-                            equipItem?.Equipped();
-                            player.IncreaseDamageAndArmor(-equipItem.Value.damage, -equipItem.Value.armor);
                             currentItem.Equipped();
-                            player.equipment[0] = currentItem;
-                            player.IncreaseDamageAndArmor(currentItem.damage, currentItem.armor);
-
+                            player.inventory[idx - 1] = currentItem;
+                            player.IncreaseDamageAndArmor(-player.weaponEqu[0].Value.damage, -player.weaponEqu[0].Value.armor);
+                            player.weaponEqu[0] = null;
                         }
-
                     }
-                    else
-                    {
-                        player.equipment[0]?.Equipped();
-                        player.IncreaseDamageAndArmor(-player.equipment[0].Value.damage, -player.equipment[0].Value.armor);
-                        player.equipment[0] = null;
 
-
-                    }
+                   
                   
                     Console.Clear();
                     EquipManagement();

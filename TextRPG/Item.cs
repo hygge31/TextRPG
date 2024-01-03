@@ -44,7 +44,7 @@ namespace TextRPG
         public StringBuilder name;
         public int damage;
         public int armor;
-        public bool isEquipped;
+        public bool isEquipped { get; set; }
         public string information;
         public int price;
         public bool isSell { get; set; }
