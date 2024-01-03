@@ -410,8 +410,8 @@ namespace TextRPG
                             EquipItem? equipItem = player.equipment[0];
                             equipItem?.Equipped();
                             player.IncreaseDamageAndArmor(-equipItem.Value.damage, -equipItem.Value.armor);
+                            currentItem.Equipped();
                             player.equipment[0] = currentItem;
-                            player.equipment[0]?.Equipped();
                             player.IncreaseDamageAndArmor(currentItem.damage, currentItem.armor);
 
                         }

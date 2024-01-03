@@ -38,7 +38,7 @@ namespace TextRPG
 
 	}
 
-    public struct EquipItem : ICloneable
+    public struct EquipItem
     {
         public ItemCategory category;
         public StringBuilder name;
@@ -77,20 +77,6 @@ namespace TextRPG
             }
         }
 
-        public object Clone()
-        {
-            EquipItem newItem = new EquipItem();
-            newItem.category = category;
-            newItem.name = name;
-            newItem.damage = damage;
-            newItem.armor = armor;
-            newItem.isEquipped = false;
-            newItem.information = information;
-            newItem.price = price;
-            newItem.isSell = false;
-
-            return newItem;
-        }
 
 
 
