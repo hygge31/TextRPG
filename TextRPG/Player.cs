@@ -14,6 +14,7 @@ namespace TextRPG
         public float levelUpExp;
         public int increaseInDamage;
         public int increaseInArmor;
+        public List<ConItem> activeBuff;
 
         public EquipItem?[] equipment = new EquipItem?[5]; //머리,갑옷, 바지, 장갑 , 신발
         public EquipItem?[] weaponEqu = new EquipItem?[2]; // 무기, 방패
@@ -72,9 +73,10 @@ namespace TextRPG
             gold = 1500;
             currentExp = 0;
             levelUpExp = 20;
+            activeBuff = new List<ConItem>();
 
-            EquipItem item = new EquipItem(ItemCategory.Weapon, new StringBuilder("나무 몽둥이"), 2, 0, false, "일반 나무 몽둥이");
-            EquipItem item2 = new EquipItem(ItemCategory.Weapon, new StringBuilder("낡은 단검"), 4, 0, false, "흔해 빠진 낡은 단검");
+            EquipItem item = new EquipItem(ItemCategory.Weapon, new StringBuilder("나무 몽둥이"), 2, 0, false, "일반 나무 몽둥이",100);
+            EquipItem item2 = new EquipItem(ItemCategory.Weapon, new StringBuilder("낡은 단검"), 4, 0, false, "흔해 빠진 낡은 단검",200);
 
 
             inventory.Add(item);

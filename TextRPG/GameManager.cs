@@ -14,6 +14,7 @@ namespace TextRPG
 	{
 		GameState gameState;
 		Player player;
+        Merchant merchant;
 		bool isSelectClass;
 
         public GameManager()
@@ -27,6 +28,7 @@ namespace TextRPG
         public void GameStart()
 		{
 			player = new Player();
+            merchant = new Merchant();
 			//if (!isSelectClass)
 			//{
 			//	SelectClassMessage();
@@ -57,7 +59,9 @@ namespace TextRPG
                 }
 				else if (select == "3")
 				{
-					//store
+                    //store
+                    Console.Clear();
+                    MerchantMenu();
 				}
 				else
 				{
@@ -205,7 +209,7 @@ namespace TextRPG
 				Console.Clear();
 			}
         }
-
+        
         //---------------------------------------------------------------------------------------------------------------------Inventory
         void InventoryMenu()
 		{
@@ -284,6 +288,7 @@ namespace TextRPG
                    
                 }
             }
+
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("1. 장착 관리");
@@ -527,7 +532,333 @@ namespace TextRPG
             }
         }
         //---------------------------------------------------------------------------------------------------------------------Inventory
+        //---------------------------------------------------------------------------------------------------------------------Merchant
+        void MerchantMenu()
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("상점");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine("어서 오시게.. 이곳에서 단단히 준비하고 가는게...좋을걸세...");
+            Console.WriteLine();
+            Console.WriteLine("1. 장비 구매");
+            Console.WriteLine("2. 소모품 구매");
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
 
+            NextActionMessage();
+            string select = Console.ReadLine();
+
+            if (select == "1")
+            {
+                //장비 구매
+                Console.Clear();
+                MerchantEquipMenu();
+            }
+            else if (select == "0")
+            {
+                Console.Clear();
+                //소모품 구매
+            }
+            else
+            {
+                Console.Clear();
+                WrongInput();
+                MerchantMenu();
+            }
+        }
+
+        void MerchantEquipMenu()
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("상점");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine("자네에게 맞는 장비를 골라 보시게.. 물론...꽁짜는 아닐세.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write(player.gold);
+            Console.ResetColor();
+            Console.WriteLine(" G");
+            Console.WriteLine();
+
+            Console.WriteLine("[아이탬 목록]");
+            foreach (Object item in merchant.equipItems)
+            {
+                if (item is EquipItem)
+                {
+                    EquipItem currentItem = (EquipItem)item;
+                    if (currentItem.category == ItemCategory.Weapon)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("- ");
+                        Console.ResetColor();
+                        Console.Write(currentItem.name + "\t");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        Console.Write("공격력 ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("+");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.Write(currentItem.damage);
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        Console.Write(currentItem.information);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(" | ");
+                        Console.ResetColor();
+                        if (currentItem.isSell)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine(" 구매 완료");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.Write(currentItem.price);
+                            Console.ResetColor();
+                            Console.Write(" G\n");
+                        }
+                        
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("- ");
+                        Console.ResetColor();
+                        Console.Write(currentItem.name);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        Console.Write("방어력 ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("+");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.Write(currentItem.armor);
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        Console.Write(currentItem.information);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(" | ");
+                        Console.ResetColor();
+                        if (currentItem.isSell)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine(" 구매 완료");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.Write(currentItem.price);
+                            Console.ResetColor();
+                            Console.Write(" G\n");
+                        }
+
+                    }
+
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine("1.아이템 구매");
+            Console.WriteLine("0.나가기");
+            NextActionMessage();
+            string select = Console.ReadLine();
+            if(select == "1")
+            {
+                Console.Clear();
+                MerchantEquipManagement();
+
+            }else if(select == "0")
+            {
+                Console.Clear();
+                MerchantMenu();
+            }
+            else
+            {
+                Console.Clear();
+                WrongInput();
+                MerchantEquipMenu();
+            }
+
+        }
+
+        void MerchantEquipManagement()
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("상점");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine("돈은...준비 됐나....");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write(player.gold);
+            Console.ResetColor();
+            Console.WriteLine(" G");
+            Console.WriteLine();
+            Console.WriteLine("[아이탬 목록]");
+            int idx = 1;
+
+
+            foreach (EquipItem item in merchant.equipItems)
+            {
+                    if (item.category == ItemCategory.Weapon)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(idx + ".");
+                        Console.ResetColor();
+                        Console.Write(item.name + "\t");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        Console.Write("공격력 ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("+");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.Write(item.damage);
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        Console.Write(item.information);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        if (item.isSell)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine(" 구매 완료");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.Write(item.price);
+                            Console.ResetColor();
+                            Console.Write(" G\n");
+                        }
+                        idx++;
+                        
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(idx + ".");
+                        Console.ResetColor();
+                        Console.Write(item.name + "\t");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        Console.Write("방어력 ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("+");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.Write(item.armor);
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        Console.Write(item.information);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        if (item.isSell)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine(" 구매 완료");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.Write(item.price);
+                            Console.ResetColor();
+                            Console.Write(" G\n");
+                        }
+                        idx++;
+                        
+                    }
+
+                }
+            
+            Console.WriteLine();
+            Console.WriteLine("0.나가기");
+            NextActionMessage();
+            string select = Console.ReadLine();
+            if(int.TryParse(select,out int number) && number-1 < merchant.equipItems.Count)
+            {
+                if (number != 0)
+                {
+                    EquipItem currentItem = merchant.equipItems[number - 1];
+                    if (currentItem.isSell)
+                    {
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.WriteLine("이미 구매한 아이템 입니다.");
+                        Console.ResetColor();
+                        MerchantEquipManagement();
+                        
+                    }
+                    else if (player.gold >= currentItem.price)
+                    {
+
+                        currentItem.isSell = true;
+                        merchant.equipItems[number - 1] = currentItem;
+                        player.gold -= currentItem.price;
+                        player.inventory.Add(currentItem);
+                        
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine("구매를 완료했습니다.");
+                        Console.ResetColor();
+                        MerchantEquipManagement();
+                        
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Gold가 부족합니다.");
+                        Console.ResetColor();
+                        MerchantEquipManagement();
+                    }
+                }
+                else
+                {
+                    Console.Clear();
+                    MerchantEquipMenu();
+                }
+            }
+            else
+            {
+                Console.Clear();
+                WrongInput();
+                MerchantEquipManagement();
+            }
+            //rr
+        }
+
+        void MerchantConMenu()
+        {
+
+        }
+
+        //---------------------------------------------------------------------------------------------------------------------Merchant
         //----------------------------------------------------------------------------Menu
 
         //----------------------------------------------------------------------------Message
