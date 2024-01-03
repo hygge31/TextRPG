@@ -16,8 +16,8 @@ namespace TextRPG
         public int increaseInArmor;
         public List<ConItem> activeBuff;
 
-        public EquipItem?[] equipment = new EquipItem?[5]; //머리,갑옷, 바지, 장갑 , 신발
-        public EquipItem?[] weaponEqu = new EquipItem?[2]; // 무기, 방패
+        public EquipItem?[] equipment = new EquipItem?[1]; //갑옷
+        public EquipItem?[] weaponEqu = new EquipItem?[1]; // 무기
 
         public List<Object> inventory = new List<Object>();
 
@@ -122,9 +122,11 @@ namespace TextRPG
             increaseInDamage += damage;
             increaseInArmor += armor;
         }
-
-
-
+        public void RemoveList(int idx)
+        {
+            inventory.Remove(idx);
+        }
     }
+    
 }
 

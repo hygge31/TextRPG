@@ -324,7 +324,7 @@ namespace TextRPG
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
-            List<object> list = new List<object>();
+            
             int num = 1;
             string equipStr = "[E] ";
             foreach (Object item in player.inventory)
@@ -353,7 +353,7 @@ namespace TextRPG
                         Console.ResetColor();
                         Console.Write(currentItem.information);
                         Console.WriteLine();
-                        list.Add(currentItem);
+                        
                         num++;
                     }
                     else
@@ -377,7 +377,7 @@ namespace TextRPG
                         Console.ResetColor();
                         Console.Write(currentItem.information);
                         Console.WriteLine();
-                        list.Add(currentItem);
+                        
                         num++;
                     }
 
@@ -391,22 +391,41 @@ namespace TextRPG
             
             if(select != "0")
             {
-                if(int.TryParse(select,out int idx) && idx-1 < list.Count)
+                if(int.TryParse(select,out int idx) && idx-1 < player.inventory.Count)
                 {
-                    EquipItem currentItem = (EquipItem)list[idx-1];
+                    EquipItem currentItem = (EquipItem)player.inventory[idx-1];
                     int stringIdx = currentItem.name.ToString().IndexOf(equipStr);
                     Console.Write(stringIdx);
 
                     if (stringIdx == -1)
                     {
-                        currentItem.name.Insert(0, equipStr);
-                        player.IncreaseDamageAndArmor(currentItem.damage, currentItem.armor);
+                        if (player.equipment[0]== null)
+                        {
+                            currentItem.Equipped();
+                            player.IncreaseDamageAndArmor(currentItem.damage, currentItem.armor);
+                            player.equipment[0] = currentItem;
+                        }
+                        else
+                        {
+                            EquipItem? equipItem = player.equipment[0];
+                            equipItem?.Equipped();
+                            player.IncreaseDamageAndArmor(-equipItem.Value.damage, -equipItem.Value.armor);
+                            player.equipment[0] = currentItem;
+                            player.equipment[0]?.Equipped();
+                            player.IncreaseDamageAndArmor(currentItem.damage, currentItem.armor);
+
+                        }
+
                     }
                     else
                     {
-                        currentItem.name.Remove(stringIdx, equipStr.Length);
-                        player.IncreaseDamageAndArmor(-currentItem.damage, -currentItem.armor);
+                        player.equipment[0]?.Equipped();
+                        player.IncreaseDamageAndArmor(-player.equipment[0].Value.damage, -player.equipment[0].Value.armor);
+                        player.equipment[0] = null;
+
+
                     }
+                  
                     Console.Clear();
                     EquipManagement();
 
@@ -491,7 +510,8 @@ namespace TextRPG
 			//}
 
    //     }
-		void ShowMyInventory()
+
+        void ShowMyInventory()
 		{
 			Console.Clear();
 			Console.WriteLine("[아이템 목록]");
@@ -542,8 +562,8 @@ namespace TextRPG
             Console.WriteLine();
             Console.WriteLine("어서 오시게.. 이곳에서 단단히 준비하고 가는게...좋을걸세...");
             Console.WriteLine();
-            Console.WriteLine("1. 장비 구매");
-            Console.WriteLine("2. 소모품 구매");
+            Console.WriteLine("1. 아이탬 구매 / 판매");
+            //Console.WriteLine("2. 소모품 구매");
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
 
@@ -556,12 +576,16 @@ namespace TextRPG
                 Console.Clear();
                 MerchantEquipMenu();
             }
-            else if (select == "0")
+            //else if (select == "2")
+            //{
+            //    Console.Clear();
+            //    //소모품 구매
+            //}
+            else if(select == "0")
             {
                 Console.Clear();
-                //소모품 구매
-            }
-            else
+
+            }else
             {
                 Console.Clear();
                 WrongInput();
@@ -573,7 +597,7 @@ namespace TextRPG
         {
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("상점");
+            Console.WriteLine("상점 - 아이템 구매");
             Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine("자네에게 맞는 장비를 골라 보시게.. 물론...꽁짜는 아닐세.");
@@ -672,6 +696,7 @@ namespace TextRPG
             }
             Console.WriteLine();
             Console.WriteLine("1.아이템 구매");
+            Console.WriteLine("2.아이템 판매");
             Console.WriteLine("0.나가기");
             NextActionMessage();
             string select = Console.ReadLine();
@@ -680,7 +705,12 @@ namespace TextRPG
                 Console.Clear();
                 MerchantEquipManagement();
 
-            }else if(select == "0")
+            }else if(select == "2")
+            {
+                Console.Clear();
+                MerchantEquipSellManagement();
+            }
+            else if (select == "0")
             {
                 Console.Clear();
                 MerchantMenu();
@@ -851,6 +881,147 @@ namespace TextRPG
                 MerchantEquipManagement();
             }
             //rr
+        }
+
+        void MerchantEquipSellManagement()
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("상점 - 아이템 판매");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine("흠... 무엇을 팔텐가..");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write(player.gold);
+            Console.ResetColor();
+            Console.WriteLine(" G");
+            Console.WriteLine();
+            Console.WriteLine("[아이탬 목록]");
+            int idx = 1;
+            foreach (object item in player.inventory)
+            {
+                if(item is EquipItem)
+                {
+                    EquipItem currentItem = (EquipItem)item;
+                    if (currentItem.category == ItemCategory.Weapon)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(idx + ".");
+                        Console.ResetColor();
+                        Console.Write(currentItem.name + "\t");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        Console.Write("공격력 ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("+");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.Write(currentItem.damage);
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        Console.Write(currentItem.information);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        Console.Write("판매 금액 :");
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
+                        Console.Write(currentItem.price *0.85f);
+                        Console.ResetColor();
+                        Console.Write(" G\n");
+
+                        idx++;
+
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(idx + ".");
+                        Console.ResetColor();
+                        Console.Write(currentItem.name + "\t");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        Console.Write("방어력 ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("+");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                        Console.Write(currentItem.armor);
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("\t| ");
+                        Console.ResetColor();
+                        Console.Write(currentItem.information);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(" | ");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
+                        Console.Write(currentItem.price * 0.85f);
+                        Console.ResetColor();
+                        Console.Write(" G\n");
+
+                        idx++;
+
+                    }
+                }
+               
+
+            }
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+            NextActionMessage();
+            string select = Console.ReadLine();
+            if(int.TryParse(select,out int number) && number -1 < player.inventory.Count)
+            {
+                if(number != 0)
+                {
+                    EquipItem item = (EquipItem)player.inventory[number - 1];
+                    item.isSell = false;
+                    player.gold += (int)(item.price * 0.85f);
+                    string chr = "[E] ";
+                    int chrIdx = item.name.ToString().IndexOf("[E] ");
+                    if (chrIdx != -1)
+                    {
+                        player.IncreaseDamageAndArmor(-item.damage, -item.armor);
+                        item.name.Remove(chrIdx, chr.Length);
+                    }
+
+                    for (int i = 0; i < merchant.equipItems.Count; i++)
+                    {
+                        if (merchant.equipItems[i].name == item.name)
+                        {
+                            if (merchant.equipItems[i].isSell)
+                            {
+                                merchant.equipItems[i] = item;
+                            }
+                        }
+                    }
+                    player.inventory.RemoveAt(number - 1);
+                    
+                    Console.Clear();
+                    MerchantEquipSellManagement();
+                }
+                else
+                {
+                    Console.Clear();
+                    MerchantEquipMenu();
+                }
+                
+
+            }
+            else
+            {
+                Console.Clear();
+                WrongInput();
+                MerchantEquipSellManagement();
+            }
+
         }
 
         void MerchantConMenu()

@@ -63,15 +63,17 @@ namespace TextRPG
 
         public void Equipped()
         {
-            string equ = "[E]";
+            string equ = "[E] ";
 
-            if (isEquipped)
+            if (!isEquipped)
             {
                 name.Insert(0, equ);
+                isEquipped = true;
             }
             else
             {
                 name.Replace(equ, "");
+                isEquipped = false;
             }
         }
 
@@ -89,6 +91,8 @@ namespace TextRPG
 
             return newItem;
         }
+
+
 
        public void IsSell()
         {
