@@ -443,6 +443,54 @@ namespace TextRPG
                             player.IncreaseDamageAndArmor(-player.weaponEqu[0].Value.damage, -player.weaponEqu[0].Value.armor);
                             player.weaponEqu[0] = null;
                         }
+                    }else if(currentItem.category == ItemCategory.Armor)
+                    {
+                        int stringIdx = currentItem.name.ToString().IndexOf(equipStr);
+
+                        if (stringIdx == -1)
+                        {
+                            if (player.equipment[0] == null)
+                            {
+                                currentItem.Equipped();
+                                player.inventory[idx - 1] = currentItem;
+                                player.IncreaseDamageAndArmor(currentItem.damage, currentItem.armor);
+                                player.equipment[0] = currentItem;
+                            }
+                            else
+                            {
+                                EquipItem? equipItem = player.equipment[0];
+                                for (int i = 0; i < player.inventory.Count; i++)
+                                {
+                                    if (player.inventory[i] is EquipItem)
+                                    {
+                                        EquipItem item = (EquipItem)player.inventory[i];
+                                        if (item.name == equipItem?.name)
+                                        {
+                                            EquipItem newItem = item;
+                                            newItem.Equipped();
+                                            player.inventory[i] = newItem;
+
+
+                                            player.IncreaseDamageAndArmor(-equipItem.Value.damage, -equipItem.Value.armor);
+
+                                        }
+                                    }
+                                }
+                                currentItem.Equipped();
+                                player.inventory[idx - 1] = currentItem;
+                                player.IncreaseDamageAndArmor(currentItem.damage, currentItem.armor);
+                                player.equipment[0] = currentItem;
+
+                            }
+
+                        }
+                        else
+                        {
+                            currentItem.Equipped();
+                            player.inventory[idx - 1] = currentItem;
+                            player.IncreaseDamageAndArmor(-player.equipment[0].Value.damage, -player.equipment[0].Value.armor);
+                            player.equipment[0] = null;
+                        }
                     }
 
                    
