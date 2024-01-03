@@ -173,7 +173,19 @@ namespace TextRPG
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Console.Write(player.gold);
             Console.ResetColor();
-            Console.Write(" G");
+            Console.Write(" G\n");
+
+            Console.Write("경험치\t: ");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write(player.currentExp);
+            Console.ResetColor();
+            Console.Write(" / ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(player.levelUpExp);
+            Console.ResetColor();
+
+
+
 
             Console.WriteLine();
             Console.WriteLine();

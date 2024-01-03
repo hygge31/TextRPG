@@ -10,13 +10,15 @@ namespace TextRPG
         public float health;
         public float attackDamge;
         public float armor;
+        public float currentExp;
+        public float levelUpExp;
         public int increaseInDamage;
         public int increaseInArmor;
 
         public EquipItem?[] equipment = new EquipItem?[5]; //머리,갑옷, 바지, 장갑 , 신발
         public EquipItem?[] weaponEqu = new EquipItem?[2]; // 무기, 방패
 
-        public List<object> inventory = new List<object>();
+        public List<Object> inventory = new List<Object>();
 
         public Player()
         {
@@ -68,7 +70,8 @@ namespace TextRPG
             armor = 5;
             health = 100;
             gold = 1500;
-
+            currentExp = 0;
+            levelUpExp = 20;
 
             EquipItem item = new EquipItem(ItemCategory.Weapon, new StringBuilder("나무 몽둥이"), 2, 0, false, "일반 나무 몽둥이");
             EquipItem item2 = new EquipItem(ItemCategory.Weapon, new StringBuilder("낡은 단검"), 4, 0, false, "흔해 빠진 낡은 단검");
