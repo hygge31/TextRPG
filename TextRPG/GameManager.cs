@@ -1329,21 +1329,26 @@ namespace TextRPG
         void SaveData()
         {
             TextAnimation("데이터 저장중..........", 200);
-            string currentDirectory = Directory.GetCurrentDirectory()+ "/SaveData/";
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string saveDataFolderPath = Path.Combine(currentDirectory, "SaveData");
+            if (!Directory.Exists(saveDataFolderPath))
+            {
+                Directory.CreateDirectory(saveDataFolderPath);
+            }
             string json = JsonConvert.SerializeObject(player);
-            File.WriteAllText(currentDirectory+"saveData.json", json);
+            File.WriteAllText(saveDataFolderPath + "/saveData.json", json);
             GreenText("데이터 저장 완료");
-           
+
         }
 
         void LoadData()
         {
             TextAnimation("데이터 로드중...............", 200);
-            string currentDirectory = Directory.GetCurrentDirectory()+"/SaveData";
-            string saveDataFolderPath = Path.Combine(currentDirectory, "saveData.json");
-            if (File.Exists(saveDataFolderPath))
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string saveDataFolderPath = Path.Combine(currentDirectory, "SaveData");
+            if (File.Exists(saveDataFolderPath + "/saveData.json"))
             {
-                string json = File.ReadAllText(saveDataFolderPath);
+                string json = File.ReadAllText(saveDataFolderPath + "/saveData.json");
                 Player loadPlayer = JsonConvert.DeserializeObject<Player>(json);
                 player = loadPlayer;
                 GreenText("데이터 로드 완료.");
@@ -1355,7 +1360,7 @@ namespace TextRPG
                 RedText("저장된 데이터가 없습니다.");
                 Console.WriteLine();
             }
-            
+
         }
 
         //----------------------------------------------------------------------------Save And Load
