@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+
+
 namespace TextRPG
 {
 	public class Player:ConsoleText
@@ -10,12 +12,12 @@ namespace TextRPG
         public float currentHealth;
         public float maxHealth;
         public float attackDamge;
+        public float increaseInDamage;
         public int armor;
+        public int increaseInArmor;
         public float currentExp;
         public float levelUpExp;
-        public float increaseInDamage;
-        public int increaseInArmor;
-        public List<ConItem> activeBuff;
+        //public List<ConItem> activeBuff;
 
         public EquipItem?[] equipment = new EquipItem?[1]; //갑옷
         public EquipItem?[] weaponEqu = new EquipItem?[1]; // 무기
@@ -75,7 +77,7 @@ namespace TextRPG
             gold = 1500;
             currentExp = 0;
             levelUpExp = 20;
-            activeBuff = new List<ConItem>();
+            //activeBuff = new List<ConItem>();
 
             EquipItem item = new EquipItem(ItemCategory.Weapon, new StringBuilder("나무 몽둥이"), 2, 0, false, "일반 나무 몽둥이",100);
             EquipItem item2 = new EquipItem(ItemCategory.Weapon, new StringBuilder("낡은 단검"), 4, 0, false, "흔해 빠진 낡은 단검",200);
@@ -274,7 +276,7 @@ namespace TextRPG
             }
 
         }
-       
+        
     }
     
 }

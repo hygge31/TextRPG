@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Intrinsics.X86;
+using Newtonsoft.Json;
 
 namespace TextRPG
 {
@@ -18,35 +19,25 @@ namespace TextRPG
         DungeonManager dungeonManager;
 		bool isSelectClass;
 
-        public GameManager()
-		{
-			gameState = GameState.Play;
-        }
-
-
-
-
+        
         public void GameStart()
 		{
-			player = new Player();
+            gameState = GameState.Play;
             merchant = new Merchant();
             dungeonManager = new DungeonManager();
-			//if (!isSelectClass)
-			//{
-			//	SelectClassMessage();
-			//	Console.Clear();
-
-   //         }
-			//클래스 선택
-
+            player = new Player();
+            LoadData();
 
             Console.WriteLine("이곳에 온걸 환영하네, \n던전에 들어가기 전에 이곳에서 준비하고 가시게나.\n\n");
 
 			while (gameState == GameState.Play)
 			{
+                
+                
                 if (player.currentHealth == 0)
                 {
                     gameState = GameState.GameOver;
+                    Console.Clear();
                     break;
                 }
 
@@ -75,7 +66,7 @@ namespace TextRPG
                     if(player.currentHealth <= 35)
                     {
                         Console.Clear();
-                        Console.WriteLine("체력이 낮아 던전에 입장할 수 없습니다. 체력을 회복해 주세요.");
+                        Console.WriteLine("체력이 낮습니다!");
                     }
                     else
                     {
@@ -91,6 +82,21 @@ namespace TextRPG
                     RestMenu();
 
                 }
+                else if (select == "6")
+                {
+                    //rest
+                    Console.Clear();
+                    SaveData();
+
+                }
+                else if (select == "7")
+                {
+                    //rest
+                    Console.WriteLine("게임 저장 후 종료 합니다.");
+                    SaveData();
+                    break;
+
+                }
                 else
 				{
 					Console.Clear();
@@ -98,7 +104,33 @@ namespace TextRPG
 				}
 
 			}
-            Console.Write("플레이어 사망");
+            if(gameState == GameState.GameOver)
+            {
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("던전 탐색중 사망하였습니다......");
+                Console.WriteLine("로드 파일을 불러오겠습니까?");
+                Console.WriteLine();
+                Console.WriteLine("1. 예 ");
+                Console.WriteLine("2. 아니요 ");
+                Console.WriteLine();
+                NextActionMessage();
+                string select = Console.ReadLine();
+
+                if(int.TryParse(select,out int number))
+                {
+                    if(number == 1)
+                    {
+                        GameStart();
+                    }else if(number == 2)
+                    {
+                        TextAnimation("게임을 종료 합니다......",100);
+                    }
+                }
+
+            }
+            
+            
 		}
 
 
@@ -114,6 +146,8 @@ namespace TextRPG
             Console.WriteLine("3. 상점");
             Console.WriteLine("4. 던전");
             Console.WriteLine("5. 휴식");
+            Console.WriteLine("6. 게임 데이터 저장");
+            Console.WriteLine("7. 게임 종료");
             NextActionMessage();
 
             string select = Console.ReadLine();
@@ -130,6 +164,10 @@ namespace TextRPG
                     return "4";
                 case "5":
                     return "5";
+                case "6":
+                    return "6";
+                case "7":
+                    return "7";
                 default:
 					return "0";
 
@@ -1286,63 +1324,41 @@ namespace TextRPG
 			Console.SetCursorPosition(0, 0);
 		}
 
-		//void NextActionMessage()
-  //      {
-  //          Console.WriteLine();
-  //          Console.WriteLine("원하시는 행동을 선택해 주세요.");
-  //          Console.ForegroundColor = ConsoleColor.Red;
-  //          Console.Write(">> ");
-  //      }
-
-
-  //      //void SelectClassMessage()
-  //      //{
-  //      //          Console.WriteLine("클래스를 선택해 주세요.");
-  //      //          Console.WriteLine("1. Warrior ");
-  //      //          string num = Console.ReadLine();
-  //      //          if (num == "1")
-  //      //	{
-  //      //		player = new Player();
-  //      //		isSelectClass = true;
-
-
-  //      //          }
-  //      //	else
-  //      //	{
-  //      //              SelectClassMessage();
-  //      //	}
-
-  //      //      }
-
-
-  //      void WrongInput()
-  //      {
-  //          Console.ForegroundColor = ConsoleColor.Red;
-  //          Console.WriteLine("잘못된 입력 입니다.");
-  //          Console.ResetColor();
-  //      }
-
-  //      void DarkRedText(string str)
-  //      {
-  //          Console.ForegroundColor = ConsoleColor.DarkRed;
-  //          Console.Write(str);
-  //          Console.ResetColor();
-  //      }
-  //      void YellowText(string str)
-  //      {
-  //          Console.ForegroundColor = ConsoleColor.Yellow;
-  //          Console.Write(str);
-  //          Console.ResetColor();
-  //      }
-  //      void DarkBlueText(string str)
-  //      {
-  //          Console.ForegroundColor = ConsoleColor.DarkBlue;
-  //          Console.Write(str);
-  //          Console.ResetColor();
-  //      }
-
         //----------------------------------------------------------------------------Message
+        //----------------------------------------------------------------------------Save And Load
+        void SaveData()
+        {
+            TextAnimation("데이터 저장중..........", 200);
+            string currentDirectory = Directory.GetCurrentDirectory()+ "/SaveData/";
+            string json = JsonConvert.SerializeObject(player);
+            File.WriteAllText(currentDirectory+"saveData.json", json);
+            GreenText("데이터 저장 완료");
+           
+        }
 
+        void LoadData()
+        {
+            TextAnimation("데이터 로드중...............", 200);
+            string currentDirectory = Directory.GetCurrentDirectory()+"/SaveData";
+            string saveDataFolderPath = Path.Combine(currentDirectory, "saveData.json");
+            if (File.Exists(saveDataFolderPath))
+            {
+                string json = File.ReadAllText(saveDataFolderPath);
+                Player loadPlayer = JsonConvert.DeserializeObject<Player>(json);
+                player = loadPlayer;
+                GreenText("데이터 로드 완료.");
+                Console.WriteLine();
+
+            }
+            else
+            {
+                RedText("저장된 데이터가 없습니다.");
+                Console.WriteLine();
+            }
+            
+        }
+
+        //----------------------------------------------------------------------------Save And Load
     }
 }
 
