@@ -2,14 +2,15 @@
 using System.Text;
 namespace TextRPG
 {
-	public class Player
+	public class Player:ConsoleText
 	{
 		public int level;
         public int gold;
         public string clas;
-        public float health;
-        public float attackDamge;
-        public float armor;
+        public float currentHealth;
+        public float maxHealth;
+        public int attackDamge;
+        public int armor;
         public float currentExp;
         public float levelUpExp;
         public int increaseInDamage;
@@ -69,7 +70,8 @@ namespace TextRPG
             clas = "(전사)";
             attackDamge = 10;
             armor = 5;
-            health = 100;
+            maxHealth = 100;
+            currentHealth = maxHealth;
             gold = 1500;
             currentExp = 0;
             levelUpExp = 20;
@@ -125,6 +127,82 @@ namespace TextRPG
         public void RemoveList(int idx)
         {
             inventory.Remove(idx);
+        }
+        public void DungeonClearFail()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("던전 클리어 실패!");
+            Console.ResetColor();
+            Console.WriteLine("던전 클리어 실패로 인해 체력이 감소 합니다. 마을에서 체력을 회복해 주세요.");
+            Console.WriteLine();
+            Console.Write(currentHealth);
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write(" -> ");
+            Console.ResetColor();
+            currentHealth -= currentHealth / 2;
+            Console.Write(currentHealth);
+
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 선택해 주세요.");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(">> ");
+            string select = Console.ReadLine();
+            Console.Clear();
+        }
+
+        public void DungeonClear(int decrease,int reward)
+        {
+            Random random = new Random();
+
+            if(currentHealth - decrease <= 0)
+            {
+                currentHealth = 0;
+            }
+            else
+            {
+                float randomRewardRate = random.Next(attackDamge, attackDamge * 2) / 100f;
+                int addReward = (int)(reward * randomRewardRate);
+                gold += reward + addReward;
+
+
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("던전 클리어!");
+                Console.ResetColor();
+                Console.WriteLine("던전 클리어! 감소한 체력을 마을에서 회복해 주세요.");
+                Console.WriteLine();
+                Console.WriteLine("[탐험 결과]");
+
+                Console.Write("체력 ");
+                DarkRedText(currentHealth.ToString());
+                DarkYellowText(" -> ");
+                currentHealth -= decrease;
+                DarkRedText(currentHealth.ToString());
+                Console.WriteLine();
+                Console.Write("던전 보상\t: ");
+                YellowText(reward.ToString());
+                Console.Write(" G\n");
+                Console.Write("추가 보상\t: ");
+                YellowText(addReward.ToString());
+                Console.Write(" G");
+                Console.WriteLine();
+                Console.WriteLine();
+
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine();
+                NextActionMessage();
+                string select = Console.ReadLine();
+                Console.Clear();
+
+            }
+
+
+
+        }
+        public void PlayerDeath()
+        {
+           
         }
     }
     

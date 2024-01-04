@@ -1,20 +1,23 @@
 ﻿using System;
+using System.Runtime.Intrinsics.X86;
+
 namespace TextRPG
 {
-	enum GameState
+	public enum GameState
 	{
 		Play,
 		GameOver
 	}
 
-   
+    
 
 
     public class GameManager
 	{
-		GameState gameState;
-		Player player;
+        static public GameState gameState;
+        Player player;
         Merchant merchant;
+        DungeonManager dungeonManager;
 		bool isSelectClass;
 
         public GameManager()
@@ -29,6 +32,7 @@ namespace TextRPG
 		{
 			player = new Player();
             merchant = new Merchant();
+            dungeonManager = new DungeonManager();
 			//if (!isSelectClass)
 			//{
 			//	SelectClassMessage();
@@ -42,6 +46,11 @@ namespace TextRPG
 
 			while (gameState == GameState.Play)
 			{
+                if (player.currentHealth == 0)
+                {
+                    gameState = GameState.GameOver;
+                    break;
+                }
 
 				string select = MainMenu();
 				if (select == "1")
@@ -63,13 +72,21 @@ namespace TextRPG
                     Console.Clear();
                     MerchantMenu();
 				}
-				else
+                else if (select == "4")
+                {
+                    //Dungeon
+                    Console.Clear();
+                    DungeonMenu();
+
+                }
+                else
 				{
 					Console.Clear();
                     WrongInput();
 				}
 
 			}
+            Console.Write("플레이어 사망");
 		}
 
 
@@ -81,6 +98,7 @@ namespace TextRPG
             Console.WriteLine("1. 상태 보기");
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine("3. 상점");
+            Console.WriteLine("4. 던전");
             NextActionMessage();
 
             string select = Console.ReadLine();
@@ -93,6 +111,8 @@ namespace TextRPG
                     return "2";
                 case "3":
                     return "3";
+                case "4":
+                    return "4";
                 default:
 					return "0";
 
@@ -170,8 +190,13 @@ namespace TextRPG
 
             Console.Write("Health\t: ");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine(player.health);
+            Console.Write(player.currentHealth);
             Console.ResetColor();
+            Console.Write(" / ");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.Write(player.maxHealth);
+            Console.ResetColor();
+            Console.WriteLine();
 
             Console.Write("Gold\t: ");
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -1099,6 +1124,59 @@ namespace TextRPG
         }
 
         //---------------------------------------------------------------------------------------------------------------------Merchant
+        //---------------------------------------------------------------------------------------------------------------------Dungeon
+        void DungeonMenu()
+        {
+            Console.WriteLine();
+            Console.WriteLine();
+            DarkRedText("[던전 입장]\n");
+            Console.WriteLine();
+            Console.WriteLine("방어력이 낮으면 아마 40% 확률로 실패할걸세... ");
+            Console.WriteLine("한번 들어가면 돌이킬 수 없다네.. 그래도 들어갈텐가..?");
+            Console.WriteLine();
+            Console.Write("현재 체력 : ");
+            DarkRedText(player.currentHealth.ToString());
+            Console.WriteLine();
+            Console.Write("현재 방어력: ");
+            DarkBlueText((player.armor + player.increaseInArmor).ToString());
+            Console.WriteLine();
+           
+            Console.WriteLine();
+            for(int i = 0; i< dungeonManager.dungeons.Count; i++)
+            {
+                Console.Write($"{i+1}. {dungeonManager.dungeons[i].dungeonName}\t");
+                YellowText(" | ");
+                Console.Write("권장 방어력\t: ");
+                DarkRedText(dungeonManager.dungeons[i].recommendArmor.ToString());
+                Console.Write(" 이상\n");
+                
+            }
+            Console.WriteLine();
+            Console.WriteLine("0.나가기");
+            Console.WriteLine();
+            NextActionMessage();
+            string select = Console.ReadLine();
+
+            if(int.TryParse(select,out int number) && number-1<dungeonManager.dungeons.Count)
+            {
+                if(number != 0)
+                {
+                    Console.Clear();
+                    dungeonManager.EnterDungeon(dungeonManager.dungeons[number - 1], player);
+                }
+                else
+                {
+                    Console.Clear();
+                }
+
+            }
+            else
+            {
+                Console.Clear();
+            }
+
+        }
+        //---------------------------------------------------------------------------------------------------------------------Dungeon
         //----------------------------------------------------------------------------Menu
 
         //----------------------------------------------------------------------------Message
@@ -1130,24 +1208,24 @@ namespace TextRPG
         }
 
 
-		//void SelectClassMessage()
-		//{
-  //          Console.WriteLine("클래스를 선택해 주세요.");
-  //          Console.WriteLine("1. Warrior ");
-  //          string num = Console.ReadLine();
-  //          if (num == "1")
-		//	{
-		//		player = new Player();
-		//		isSelectClass = true;
+        //void SelectClassMessage()
+        //{
+        //          Console.WriteLine("클래스를 선택해 주세요.");
+        //          Console.WriteLine("1. Warrior ");
+        //          string num = Console.ReadLine();
+        //          if (num == "1")
+        //	{
+        //		player = new Player();
+        //		isSelectClass = true;
 
 
-  //          }
-		//	else
-		//	{
-  //              SelectClassMessage();
-		//	}
+        //          }
+        //	else
+        //	{
+        //              SelectClassMessage();
+        //	}
 
-  //      }
+        //      }
 
 
         void WrongInput()
@@ -1156,7 +1234,26 @@ namespace TextRPG
             Console.WriteLine("잘못된 입력 입니다.");
             Console.ResetColor();
         }
-		
+
+        void DarkRedText(string str)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write(str);
+            Console.ResetColor();
+        }
+        void YellowText(string str)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(str);
+            Console.ResetColor();
+        }
+        void DarkBlueText(string str)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.Write(str);
+            Console.ResetColor();
+        }
+
         //----------------------------------------------------------------------------Message
 
     }
