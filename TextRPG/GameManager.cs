@@ -9,10 +9,8 @@ namespace TextRPG
 		GameOver
 	}
 
-    
 
-
-    public class GameManager
+    public class GameManager :ConsoleText
 	{
         static public GameState gameState;
         Player player;
@@ -90,6 +88,7 @@ namespace TextRPG
                 {
                     //rest
                     Console.Clear();
+                    RestMenu();
 
                 }
                 else
@@ -107,6 +106,8 @@ namespace TextRPG
 
         string MainMenu()
         {
+            Console.WriteLine();
+            Console.WriteLine();
             Console.ResetColor();
             Console.WriteLine("1. 상태 보기");
             Console.WriteLine("2. 인벤토리");
@@ -1196,8 +1197,72 @@ namespace TextRPG
         //---------------------------------------------------------------------------------------------------------------------Rest
         void RestMenu()
         {
+            Console.WriteLine();
+            Console.WriteLine();
+            DarkRedText("[휴식하기]");
+            Console.WriteLine();
+            DarkYellowText("500");
+            Console.Write("G ");
+            Console.Write("를 지불하면 체력을 회복할 수 있습니다\n");
+            Console.WriteLine();
+            Console.Write("보유 골드 : ");
+            YellowText(player.gold.ToString());
+            Console.Write(" G");
+            Console.WriteLine();
+            Console.Write("현재 체력 : ");
+            RedText(player.currentHealth.ToString());
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.WriteLine("1. 휴식 하기");
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+            NextActionMessage();
+            string select = Console.ReadLine();
+            if(int.TryParse(select,out int number))
+            {
+                if(number == 1)
+                {
+                    if(player.gold < 500)
+                    {
+                        Console.Clear();
+                        RedText("Gold");
+                        Console.Write("가 부족 합니다.\n");
+                        RestMenu();
+                    }
+                    else
+                    {
+                        if(player.currentHealth == player.maxHealth)
+                        {
+                            Console.Clear();
+                            DarkRedText("체력이 이미 꽉 차있습니다.");
+                            Console.WriteLine();
+                            RestMenu();
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            player.currentHealth = player.maxHealth;
+                            TextAnimation("체력을 회복중 입니다............", 200);
+                            Console.Clear();
+                            GreenText("체력을 모두 회복했습니다!");
+                            RestMenu();
+                        }
+                        
+
+                    }
+                }
+                else
+                {
+                    Console.Clear();
+                }
+            }
 
         }
+
         //---------------------------------------------------------------------------------------------------------------------Rest
         //----------------------------------------------------------------------------Menu
 
@@ -1221,60 +1286,60 @@ namespace TextRPG
 			Console.SetCursorPosition(0, 0);
 		}
 
-		void NextActionMessage()
-        {
-            Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 선택해 주세요.");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write(">> ");
-        }
+		//void NextActionMessage()
+  //      {
+  //          Console.WriteLine();
+  //          Console.WriteLine("원하시는 행동을 선택해 주세요.");
+  //          Console.ForegroundColor = ConsoleColor.Red;
+  //          Console.Write(">> ");
+  //      }
 
 
-        //void SelectClassMessage()
-        //{
-        //          Console.WriteLine("클래스를 선택해 주세요.");
-        //          Console.WriteLine("1. Warrior ");
-        //          string num = Console.ReadLine();
-        //          if (num == "1")
-        //	{
-        //		player = new Player();
-        //		isSelectClass = true;
+  //      //void SelectClassMessage()
+  //      //{
+  //      //          Console.WriteLine("클래스를 선택해 주세요.");
+  //      //          Console.WriteLine("1. Warrior ");
+  //      //          string num = Console.ReadLine();
+  //      //          if (num == "1")
+  //      //	{
+  //      //		player = new Player();
+  //      //		isSelectClass = true;
 
 
-        //          }
-        //	else
-        //	{
-        //              SelectClassMessage();
-        //	}
+  //      //          }
+  //      //	else
+  //      //	{
+  //      //              SelectClassMessage();
+  //      //	}
 
-        //      }
+  //      //      }
 
 
-        void WrongInput()
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("잘못된 입력 입니다.");
-            Console.ResetColor();
-        }
+  //      void WrongInput()
+  //      {
+  //          Console.ForegroundColor = ConsoleColor.Red;
+  //          Console.WriteLine("잘못된 입력 입니다.");
+  //          Console.ResetColor();
+  //      }
 
-        void DarkRedText(string str)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write(str);
-            Console.ResetColor();
-        }
-        void YellowText(string str)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(str);
-            Console.ResetColor();
-        }
-        void DarkBlueText(string str)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
-            Console.Write(str);
-            Console.ResetColor();
-        }
+  //      void DarkRedText(string str)
+  //      {
+  //          Console.ForegroundColor = ConsoleColor.DarkRed;
+  //          Console.Write(str);
+  //          Console.ResetColor();
+  //      }
+  //      void YellowText(string str)
+  //      {
+  //          Console.ForegroundColor = ConsoleColor.Yellow;
+  //          Console.Write(str);
+  //          Console.ResetColor();
+  //      }
+  //      void DarkBlueText(string str)
+  //      {
+  //          Console.ForegroundColor = ConsoleColor.DarkBlue;
+  //          Console.Write(str);
+  //          Console.ResetColor();
+  //      }
 
         //----------------------------------------------------------------------------Message
 

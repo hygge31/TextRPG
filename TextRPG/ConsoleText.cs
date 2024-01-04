@@ -48,6 +48,12 @@ namespace TextRPG
             Console.Write(str);
             Console.ResetColor();
         }
+        public void GreenText(string str)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(str);
+            Console.ResetColor();
+        }
 
 
         public void NextActionMessage()
@@ -57,6 +63,20 @@ namespace TextRPG
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write(">> ");
         }
+
+
+
+        public void TextAnimation(string str,int animationSpeed)
+        {
+            foreach(char c in str)
+            {
+                Console.Write(c);
+                Thread.Sleep(animationSpeed);
+            }
+            Console.Clear();
+        }
+
+
     }
 }
 

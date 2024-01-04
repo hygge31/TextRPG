@@ -1,7 +1,7 @@
 ﻿using System;
 namespace TextRPG
 {
-	public class DungeonManager
+	public class DungeonManager : ConsoleText
 	{
 		public List<Dungeon> dungeons;
         
@@ -25,6 +25,11 @@ namespace TextRPG
             Random random = new Random();
             int healthPenalty = dungeon.recommendArmor - player.armor;
             int playerArmor = player.armor + player.increaseInArmor;
+
+            TextAnimation($"{dungeon.dungeonName}에 입장 중 입니다.", 100);
+            TextAnimation("던전 탐색 진행중............", 200);
+            TextAnimation("몬스터와 대치 중............", 200);
+
             if (dungeon.recommendArmor > playerArmor)
             {
                 int ranClear = random.Next(0, 101);

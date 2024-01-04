@@ -133,7 +133,7 @@ namespace TextRPG
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("던전 클리어 실패!");
             Console.ResetColor();
-            Console.WriteLine("던전 클리어 실패로 인해 체력이 감소 합니다. 마을에서 체력을 회복해 주세요.");
+            Console.WriteLine("몬스터로 부터 도망쳤습니다. 떨어진 체력을 마을에서 회복해 주세요.");
             Console.WriteLine();
             Console.Write(currentHealth);
             Console.ForegroundColor = ConsoleColor.DarkRed;
