@@ -152,7 +152,7 @@ namespace TextRPG
             Console.Clear();
         }
 
-        public void DungeonClear(int decrease,int reward)
+        public void DungeonClear(int decrease,int reward,int rewardExp)
         {
             Random random = new Random();
 
@@ -174,21 +174,81 @@ namespace TextRPG
                 Console.WriteLine();
                 Console.WriteLine("[탐험 결과]");
 
-                Console.Write("체력 ");
-                DarkRedText(currentHealth.ToString());
-                DarkYellowText(" -> ");
-                currentHealth -= decrease;
-                DarkRedText(currentHealth.ToString());
-                Console.WriteLine();
-                Console.Write("던전 보상\t: ");
-                YellowText(reward.ToString());
-                Console.Write(" G\n");
-                Console.Write("추가 보상\t: ");
-                YellowText(addReward.ToString());
-                Console.Write(" G");
-                Console.WriteLine();
-                Console.WriteLine();
 
+                //levelUp
+                if(currentExp + rewardExp >= levelUpExp)
+                {
+                    currentExp += rewardExp;
+
+
+                    int currentLevel = level;
+                    float currentDamage = attackDamge;
+                    int currentArmor = armor;
+                    float currentMaxHealth = maxHealth;
+
+                    LevelUp();
+                    GreenText("Level Up!!");
+                    Console.WriteLine();
+                    YellowText("--------------------------------------------------------");
+                    Console.WriteLine();
+                    Console.Write("Lv\t: ");
+                    Console.Write(currentLevel);
+                    DarkYellowText(" -> ");
+                    DarkRedText(level.ToString());
+                    Console.WriteLine();
+                    Console.Write("공격력\t: ");
+                    Console.Write(currentDamage);
+                    DarkYellowText(" -> ");
+                    DarkRedText(attackDamge.ToString());
+                    Console.WriteLine();
+                    Console.Write("방어력\t: ");
+                    Console.Write(currentArmor);
+                    DarkYellowText(" -> ");
+                    DarkRedText(armor.ToString());
+                    Console.WriteLine();
+                    Console.Write("최대 체력\t: ");
+                    Console.Write(currentMaxHealth);
+                    DarkYellowText(" -> ");
+                    DarkRedText(maxHealth.ToString());
+                    Console.WriteLine();
+                    YellowText("--------------------------------------------------------");
+                    Console.WriteLine();
+                    Console.WriteLine();
+
+
+                    Console.Write("던전 보상\t: ");
+                    YellowText(reward.ToString());
+                    Console.Write(" G\n");
+                    Console.Write("추가 보상\t: ");
+                    YellowText(addReward.ToString());
+                    Console.Write(" G");
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.Write("체력 ");
+                    DarkRedText(currentHealth.ToString());
+                    DarkYellowText(" -> ");
+                    currentHealth -= decrease;
+                    DarkRedText(currentHealth.ToString());
+                    Console.WriteLine();
+                    Console.Write("던전 보상\t: ");
+                    YellowText(reward.ToString());
+                    Console.Write(" G\n");
+                    Console.Write("추가 보상\t: ");
+                    YellowText(addReward.ToString());
+                    Console.Write(" G");
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.Write("경험치: ");
+                    DarkBlueText(currentExp.ToString());
+                    DarkYellowText(" -> ");
+                    currentExp += rewardExp;
+                    BlueText(currentExp.ToString());
+                    Console.WriteLine();
+
+                }
+                Console.WriteLine();
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine();
                 NextActionMessage();
@@ -197,13 +257,24 @@ namespace TextRPG
 
             }
 
+            void LevelUp()
+            {
+                level++;
+                currentExp = currentExp-levelUpExp;
+                levelUpExp = levelUpExp * 2;
+                armor += 1;
+                attackDamge += 0.5f;
+                maxHealth += 20;
+                currentHealth = maxHealth;
 
+                if (currentExp >= levelUpExp)
+                {
+                    LevelUp();
+                }
+            }
 
         }
-        public void PlayerDeath()
-        {
-           
-        }
+       
     }
     
 }
