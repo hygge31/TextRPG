@@ -74,9 +74,22 @@ namespace TextRPG
 				}
                 else if (select == "4")
                 {
-                    //Dungeon
+                    if(player.currentHealth <= 35)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("체력이 낮아 던전에 입장할 수 없습니다. 체력을 회복해 주세요.");
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        DungeonMenu();
+                    }
+                    
+                }
+                else if (select == "5")
+                {
+                    //rest
                     Console.Clear();
-                    DungeonMenu();
 
                 }
                 else
@@ -99,6 +112,7 @@ namespace TextRPG
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine("3. 상점");
             Console.WriteLine("4. 던전");
+            Console.WriteLine("5. 휴식");
             NextActionMessage();
 
             string select = Console.ReadLine();
@@ -113,6 +127,8 @@ namespace TextRPG
                     return "3";
                 case "4":
                     return "4";
+                case "5":
+                    return "5";
                 default:
 					return "0";
 
@@ -1177,6 +1193,12 @@ namespace TextRPG
 
         }
         //---------------------------------------------------------------------------------------------------------------------Dungeon
+        //---------------------------------------------------------------------------------------------------------------------Rest
+        void RestMenu()
+        {
+
+        }
+        //---------------------------------------------------------------------------------------------------------------------Rest
         //----------------------------------------------------------------------------Menu
 
         //----------------------------------------------------------------------------Message

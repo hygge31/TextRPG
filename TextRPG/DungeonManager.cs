@@ -24,8 +24,8 @@ namespace TextRPG
         {
             Random random = new Random();
             int healthPenalty = dungeon.recommendArmor - player.armor;
-
-            if (dungeon.recommendArmor > player.armor)
+            int playerArmor = player.armor + player.increaseInArmor;
+            if (dungeon.recommendArmor > playerArmor)
             {
                 int ranClear = random.Next(0, 101);
                 if (ranClear <= 40)

@@ -42,14 +42,14 @@ namespace TextRPG
     {
         public ItemCategory category;
         public StringBuilder name;
-        public int damage;
+        public float damage;
         public int armor;
         public bool isEquipped { get; set; }
         public string information;
         public int price;
         public bool isSell { get; set; }
 
-        public EquipItem(ItemCategory cat, StringBuilder _name,int _damage,int _armor,bool _equip,string _information,int _price)
+        public EquipItem(ItemCategory cat, StringBuilder _name,float _damage,int _armor,bool _equip,string _information,int _price)
         {
             category = cat;
             name = _name;

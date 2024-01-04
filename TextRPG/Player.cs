@@ -9,11 +9,11 @@ namespace TextRPG
         public string clas;
         public float currentHealth;
         public float maxHealth;
-        public int attackDamge;
+        public float attackDamge;
         public int armor;
         public float currentExp;
         public float levelUpExp;
-        public int increaseInDamage;
+        public float increaseInDamage;
         public int increaseInArmor;
         public List<ConItem> activeBuff;
 
@@ -119,7 +119,7 @@ namespace TextRPG
 
         }
 
-        public void IncreaseDamageAndArmor(int damage,int armor)
+        public void IncreaseDamageAndArmor(float damage,int armor)
         {
             increaseInDamage += damage;
             increaseInArmor += armor;
@@ -162,7 +162,7 @@ namespace TextRPG
             }
             else
             {
-                float randomRewardRate = random.Next(attackDamge, attackDamge * 2) / 100f;
+                float randomRewardRate = random.Next((int)attackDamge, (int)attackDamge * 2) / 100f;
                 int addReward = (int)(reward * randomRewardRate);
                 gold += reward + addReward;
 
