@@ -701,6 +701,8 @@ namespace TextRPG
             Console.WriteLine();
 
             Console.WriteLine("[아이탬 목록]");
+            DarkYellowText("-----------------------------------------------------------------------------------------------------");
+            Console.WriteLine();
             foreach (Object item in merchant.equipItems)
             {
                 if (item is EquipItem)
@@ -784,6 +786,8 @@ namespace TextRPG
                     }
 
                 }
+                DarkYellowText("-----------------------------------------------------------------------------------------------------");
+                Console.WriteLine();
             }
             Console.WriteLine();
             Console.WriteLine("1.아이템 구매");
@@ -831,6 +835,8 @@ namespace TextRPG
             Console.WriteLine(" G");
             Console.WriteLine();
             Console.WriteLine("[아이탬 목록]");
+            DarkYellowText("-----------------------------------------------------------------------------------------------------");
+            Console.WriteLine();
             int idx = 1;
 
 
@@ -839,7 +845,7 @@ namespace TextRPG
                     if (item.category == ItemCategory.Weapon)
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write(idx + ".");
+                        Console.Write(idx + ". ");
                         Console.ResetColor();
                         Console.Write(item.name + "\t");
                         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -857,7 +863,7 @@ namespace TextRPG
                         Console.ResetColor();
                         Console.Write(item.information);
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write("\t| ");
+                        Console.Write(" | ");
                         Console.ResetColor();
                         if (item.isSell)
                         {
@@ -878,7 +884,7 @@ namespace TextRPG
                     else
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write(idx + ".");
+                        Console.Write(idx + ". ");
                         Console.ResetColor();
                         Console.Write(item.name + "\t");
                         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -896,7 +902,7 @@ namespace TextRPG
                         Console.ResetColor();
                         Console.Write(item.information);
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write("\t| ");
+                        Console.Write(" | ");
                         Console.ResetColor();
                         if (item.isSell)
                         {
@@ -914,8 +920,9 @@ namespace TextRPG
                         idx++;
                         
                     }
-
-                }
+                DarkYellowText("-----------------------------------------------------------------------------------------------------");
+                Console.WriteLine();
+            }
             
             Console.WriteLine();
             Console.WriteLine("0.나가기");
@@ -1190,7 +1197,9 @@ namespace TextRPG
             Console.Write(" G");
             Console.WriteLine();
             Console.Write("현재 체력 : ");
-            RedText(player.currentHealth.ToString());
+            DarkRedText(player.currentHealth.ToString());
+            DarkYellowText(" / ");
+            RedText(player.maxHealth.ToString());
             Console.WriteLine();
             Console.WriteLine();
 
