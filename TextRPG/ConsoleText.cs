@@ -54,6 +54,12 @@ namespace TextRPG
             Console.Write(str);
             Console.ResetColor();
         }
+        public void DarkMagentaText(string str)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.Write(str);
+            Console.ResetColor();
+        }
 
 
         public void NextActionMessage()

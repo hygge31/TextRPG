@@ -6,6 +6,7 @@ namespace TextRPG
 {
 	public class Player:ConsoleText
 	{
+        public string playerName;
 		public int level;
         public int gold;
         public string clas;
@@ -68,6 +69,7 @@ namespace TextRPG
 
         void Init()
         {
+            playerName = "";
             level = 1;
             clas = "(전사)";
             attackDamge = 10;

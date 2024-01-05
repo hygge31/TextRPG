@@ -27,7 +27,7 @@ namespace TextRPG
             dungeonManager = new DungeonManager();
             player = new Player();
             LoadData();
-
+            
             Console.WriteLine("이곳에 온걸 환영하네, \n던전에 들어가기 전에 이곳에서 준비하고 가시게나.\n\n");
 
 			while (gameState == GameState.Play)
@@ -186,7 +186,12 @@ namespace TextRPG
             Console.WriteLine();
             Console.ResetColor();
 			string level = "";
-			if(player.level < 10)
+
+
+            Console.Write("Name\t: ");
+            DarkMagentaText(player.playerName);
+            Console.WriteLine();
+            if (player.level < 10)
 			{
 				level = "0" + player.level;
 			}
@@ -595,70 +600,7 @@ namespace TextRPG
 
         }
 
-   //     void ShowMyEquipmentMenu()
-   //     {
-   //         Console.Clear();
-   //         Console.ForegroundColor = ConsoleColor.DarkRed;
-   //         Console.WriteLine("인벤토리 - 장착 관리");
-			//Console.ResetColor();
-   //         Console.WriteLine("보유중인 아이템을 관리 할 수 있습니다.");
-   //         Console.ResetColor();
-   //         Console.WriteLine();
-   //         Console.WriteLine("[장착 목록]");
-   //         Console.WriteLine();
-   //         Console.WriteLine("\t[방어구]");
-   //         Console.WriteLine();
-   //         Console.Write("모자\t: {0}\t", player.equipment[0]?.name);
-			//Console.ForegroundColor = ConsoleColor.Blue;
-			//Console.Write("방어력: {0}\n", player.equipment[0]?.armor);
-			//Console.ResetColor();
 
-   //         Console.Write("상의\t: {0}\t\t", player.equipment[1]?.name);
-   //         Console.ForegroundColor = ConsoleColor.Blue;
-   //         Console.Write("방어력: {0}\n", player.equipment[1]?.armor);
-   //         Console.ResetColor();
-   //         Console.Write("하의\t: {0}\t", player.equipment[2]?.name);
-   //         Console.ForegroundColor = ConsoleColor.Blue;
-   //         Console.Write("방어력: {0}\n", player.equipment[2]?.armor);
-   //         Console.ResetColor();
-   //         Console.Write("장갑\t: {0}\t", player.equipment[3]?.name);
-   //         Console.ForegroundColor = ConsoleColor.Blue;
-   //         Console.Write("방어력: {0}\n", player.equipment[3]?.armor);
-   //         Console.ResetColor();
-   //         Console.Write("신발\t: {0}\t", player.equipment[4]?.name);
-   //         Console.ForegroundColor = ConsoleColor.Blue;
-   //         Console.Write("방어력: {0}\n", player.equipment[4]?.armor);
-
-   //         Console.ResetColor();
-
-   //         Console.WriteLine();
-   //         Console.WriteLine("\t[무기]");
-   //         Console.WriteLine();
-   //         Console.Write("오른손\t: {0}", player.weaponEqu[0]?.name);
-   //         Console.ForegroundColor = ConsoleColor.Red;
-   //         Console.Write("\t공격력 : {0}\n", player.weaponEqu[0]?.damage);
-   //         Console.ResetColor();
-
-   //         Console.Write("왼손\t: {0}", player.weaponEqu[1]?.name);
-   //         Console.ForegroundColor = ConsoleColor.Red;
-   //         Console.Write("\t공격력 : {0}\n", player.weaponEqu[1]?.damage);
-   //         Console.ResetColor();
-
-   //         Console.WriteLine();
-   //         Console.WriteLine("0. 나가기");
-   //         NextActionMessage();
-   //         string num = Console.ReadLine();
-   //         if (num != "0")
-   //         {
-   //             ShowMyEquipmentMenu();
-			//}
-			//else
-			//{
-			//	Console.Clear();
-   //             InventoryMenu();
-			//}
-
-   //     }
 
         void ShowMyInventory()
 		{
@@ -1359,6 +1301,45 @@ namespace TextRPG
             {
                 RedText("저장된 데이터가 없습니다.");
                 Console.WriteLine();
+                RedText("캐릭터를 새로 만듭니다.");
+                Console.WriteLine();
+                RedText("플레이어의 이름을 입력해 주세요.");
+                Console.WriteLine();
+                Console.WriteLine();
+                GreenText(">> ");
+                string playerName = Console.ReadLine();
+                Console.Clear();
+                Console.Write("플레이어의 이름이 ");
+                BlueText(playerName);
+                Console.Write(" 맞습니까?\n");
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("1. 예");
+                Console.WriteLine("2. 아니요");
+                NextActionMessage();
+                string select = Console.ReadLine();
+                if(int.TryParse(select,out int number))
+                {
+                    if(number == 1)
+                    {
+                        player.playerName = playerName;
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        TextAnimation("캐릭터를 생성중 입니다........", 100);
+                        Console.ResetColor();
+                        Console.Clear();
+                        GreenText("생성 완료!!  데이터 저장을 해주세요.");
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        LoadData();
+                    }
+                }
+
+
+
+
             }
 
         }
