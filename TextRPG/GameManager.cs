@@ -951,8 +951,9 @@ namespace TextRPG
 
                         currentItem.isSell = true;
                         merchant.equipItems[number - 1] = currentItem;
+                        EquipItem newItem = new EquipItem(currentItem.category,currentItem.name,currentItem.damage,currentItem.armor,false,currentItem.information,currentItem.price);
                         player.gold -= currentItem.price;
-                        player.inventory.Add(currentItem);
+                        player.inventory.Add(newItem);
                         
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Blue;
