@@ -25,15 +25,13 @@ namespace TextRPG
             gameState = GameState.Play;
             merchant = new Merchant();
             dungeonManager = new DungeonManager();
-            player = new Player();
+            //player = new Player();
             LoadData();
             
             Console.WriteLine("이곳에 온걸 환영하네, \n던전에 들어가기 전에 이곳에서 준비하고 가시게나.\n\n");
 
 			while (gameState == GameState.Play)
 			{
-                
-                
                 if (player.currentHealth == 0)
                 {
                     gameState = GameState.GameOver;
@@ -325,12 +323,14 @@ namespace TextRPG
                 if (item is EquipItem)
                 {
                     EquipItem currentItem = (EquipItem)item;
-					if(currentItem.category == ItemCategory.Weapon)
+                    
+					if(currentItem.category == "Weapon")
 					{
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write("- ");
                         Console.ResetColor();
-                        Console.Write(currentItem.name + "\t");
+                        //Console.Write(currentItem.name + "\t");
+                        FindTextChangeColorGreen(currentItem.name.ToString(), "[E] ");
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write(" | ");
                         Console.ResetColor();
@@ -352,7 +352,8 @@ namespace TextRPG
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write("- ");
                         Console.ResetColor();
-                        Console.Write(currentItem.name + "\t");
+                        //Console.Write(currentItem.name + "\t");
+                        FindTextChangeColorGreen(currentItem.name.ToString(), "[E] ");
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write(" | ");
                         Console.ResetColor();
@@ -417,12 +418,13 @@ namespace TextRPG
                 if (item is EquipItem)
                 {
                     EquipItem currentItem = (EquipItem)item;
-                    if (currentItem.category == ItemCategory.Weapon)
+                    if (currentItem.category == "Weapon")
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write(num+".");
                         Console.ResetColor();
-                        Console.Write(currentItem.name + "\t");
+                        //Console.Write(currentItem.name + "\t");
+                        FindTextChangeColorGreen(currentItem.name.ToString(), equipStr);
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write(" | ");
                         Console.ResetColor();
@@ -446,7 +448,8 @@ namespace TextRPG
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write(num+".");
                         Console.ResetColor();
-                        Console.Write(currentItem.name + "\t");
+                        //Console.Write(currentItem.name + "\t");
+                        FindTextChangeColorGreen(currentItem.name.ToString(), equipStr);
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write(" | ");
                         Console.ResetColor();
@@ -478,9 +481,10 @@ namespace TextRPG
             {
                 if(int.TryParse(select,out int idx) && idx-1 < player.inventory.Count)
                 {
+                   
                     EquipItem currentItem = (EquipItem)player.inventory[idx-1];
 
-                    if (currentItem.category == ItemCategory.Weapon)
+                    if (currentItem.category == "Weapon")
                     {
                         int stringIdx = currentItem.name.ToString().IndexOf(equipStr);
 
@@ -528,7 +532,7 @@ namespace TextRPG
                             player.IncreaseDamageAndArmor(-player.weaponEqu[0].Value.damage, -player.weaponEqu[0].Value.armor);
                             player.weaponEqu[0] = null;
                         }
-                    }else if(currentItem.category == ItemCategory.Armor)
+                    }else if(currentItem.category == "Armor")
                     {
                         int stringIdx = currentItem.name.ToString().IndexOf(equipStr);
 
@@ -618,16 +622,16 @@ namespace TextRPG
                     idx++;
 				}
 			}
-            foreach (Object item in player.inventory)
-            {
-                if (item is ConItem)
-                {
-                    ConItem currentItem = (ConItem)item;
-                    Console.WriteLine($"{idx}. {currentItem.name}\t\t{currentItem.information}");
-                    idx++;
-                }
+            //foreach (Object item in player.inventory)
+            //{
+            //    if (item is ConItem)
+            //    {
+            //        ConItem currentItem = (ConItem)item;
+            //        Console.WriteLine($"{idx}. {currentItem.name}\t\t{currentItem.information}");
+            //        idx++;
+            //    }
 
-            }
+            //}
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
             NextActionMessage();
@@ -708,7 +712,7 @@ namespace TextRPG
                 if (item is EquipItem)
                 {
                     EquipItem currentItem = (EquipItem)item;
-                    if (currentItem.category == ItemCategory.Weapon)
+                    if (currentItem.category == "Weapon")
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write("- ");
@@ -842,7 +846,7 @@ namespace TextRPG
 
             foreach (EquipItem item in merchant.equipItems)
             {
-                    if (item.category == ItemCategory.Weapon)
+                    if (item.category == "Weapon")
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write(idx + ". ");
@@ -997,16 +1001,18 @@ namespace TextRPG
             Console.WriteLine(" G");
             Console.WriteLine();
             Console.WriteLine("[아이탬 목록]");
+            DarkYellowText("-----------------------------------------------------------------------------------------------------");
+            Console.WriteLine();
             int idx = 1;
             foreach (object item in player.inventory)
             {
                 if(item is EquipItem)
                 {
                     EquipItem currentItem = (EquipItem)item;
-                    if (currentItem.category == ItemCategory.Weapon)
+                    if (currentItem.category == "Weapon")
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write(idx + ".");
+                        Console.Write(idx + ". ");
                         Console.ResetColor();
                         Console.Write(currentItem.name + "\t");
                         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -1066,8 +1072,9 @@ namespace TextRPG
                         idx++;
 
                     }
+                    DarkYellowText("-----------------------------------------------------------------------------------------------------");
+                    Console.WriteLine();
                 }
-               
 
             }
             Console.WriteLine();
@@ -1286,7 +1293,11 @@ namespace TextRPG
             {
                 Directory.CreateDirectory(saveDataFolderPath);
             }
-            string json = JsonConvert.SerializeObject(player);
+            string json = JsonConvert.SerializeObject(player, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Include
+            });
+
             File.WriteAllText(saveDataFolderPath + "/saveData.json", json);
             GreenText("데이터 저장 완료");
 
@@ -1331,6 +1342,8 @@ namespace TextRPG
                 {
                     if(number == 1)
                     {
+                        player = new Player();
+                        player.Init();
                         player.playerName = playerName;
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Green;

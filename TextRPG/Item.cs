@@ -4,43 +4,45 @@ using System.Text;
 namespace TextRPG
 
 {
-    public enum ItemCategory
-    {
-        Weapon,
-        Armor,
-        Potion,
-        Food
-    }
-
-    public struct ConItem
-	{
-        public ItemCategory category;
-        public string name;
-        public string information;
-        public int healing;
-        public int amount;
-        public int price;
-        public bool isSell;
+    //public enum ItemCategory
+    //{
+    //    Weapon,
+    //    Armor,
+    //    Potion,
+    //    Food
+    //}
 
 
-        public ConItem(ItemCategory cat,string _name,int _healing,string _information,int _price)
-        {
-            category = cat;
-            name = _name;
-            healing = _healing;
-            information = _information;
-            amount = 1;
-            price = _price;
-            isSell = false;
-        }
+ //   public struct ConItem
+	//{
+ //       public ItemCategory category;
+ //       public string name;
+ //       public string information;
+ //       public int healing;
+ //       public int amount;
+ //       public int price;
+ //       public bool isSell;
+
+
+ //       public ConItem(ItemCategory cat,string _name,int _healing,string _information,int _price)
+ //       {
+ //           category = cat;
+ //           name = _name;
+ //           healing = _healing;
+ //           information = _information;
+ //           amount = 1;
+ //           price = _price;
+ //           isSell = false;
+ //       }
 
         
 
-	}
+	//}
 
     public struct EquipItem
     {
-        public ItemCategory category;
+        //public ItemCategory category;
+        public string category;
         public StringBuilder name;
         public float damage;
         public int armor;
@@ -49,7 +51,7 @@ namespace TextRPG
         public int price;
         public bool isSell { get; set; }
 
-        public EquipItem(ItemCategory cat, StringBuilder _name,float _damage,int _armor,bool _equip,string _information,int _price)
+        public EquipItem(string cat, StringBuilder _name,float _damage,int _armor,bool _equip,string _information,int _price)
         {
             category = cat;
             name = _name;
@@ -63,10 +65,14 @@ namespace TextRPG
 
         public void Equipped()
         {
+
             string equ = "[E] ";
 
             if (!isEquipped)
             {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("[E] ");
+                Console.ResetColor();
                 name.Insert(0, equ);
                 isEquipped = true;
             }

@@ -23,11 +23,11 @@ namespace TextRPG
         public EquipItem?[] equipment = new EquipItem?[1]; //갑옷
         public EquipItem?[] weaponEqu = new EquipItem?[1]; // 무기
 
-        public List<Object> inventory = new List<Object>();
+        public List<EquipItem> inventory = new List<EquipItem>();
 
         public Player()
         {
-            Init();
+            //Init();
         }
 
         //public Player(string className)
@@ -67,7 +67,7 @@ namespace TextRPG
 
   //      }
 
-        void Init()
+        public void Init()
         {
             playerName = "";
             level = 1;
@@ -81,8 +81,8 @@ namespace TextRPG
             levelUpExp = 20;
             //activeBuff = new List<ConItem>();
 
-            EquipItem item = new EquipItem(ItemCategory.Weapon, new StringBuilder("나무 몽둥이"), 2, 0, false, "일반 나무 몽둥이",100);
-            EquipItem item2 = new EquipItem(ItemCategory.Weapon, new StringBuilder("낡은 단검"), 4, 0, false, "흔해 빠진 낡은 단검",200);
+            EquipItem item = new EquipItem("Weapon", new StringBuilder("나무 몽둥이"), 2, 0, false, "일반 나무 몽둥이",100);
+            EquipItem item2 = new EquipItem("Weapon", new StringBuilder("낡은 단검"), 4, 0, false, "흔해 빠진 낡은 단검",200);
 
 
             inventory.Add(item);
@@ -90,48 +90,48 @@ namespace TextRPG
         }
 
 
-        public void ArrangementInventory()
-        {
-            for(int i = 0; i< equipment.Length; i++)
-            {
-                EquipItem? item = equipment[i];
+        //public void ArrangementInventory()
+        //{
+        //    for(int i = 0; i< equipment.Length; i++)
+        //    {
+        //        EquipItem? item = equipment[i];
 
-                if (item != null)
-                {
-                    if (item.Value.isEquipped)
-                    {
-                        item.Value.Equipped();
-                    }
-                }
-                inventory.Add(item);
-            }
+        //        if (item != null)
+        //        {
+        //            if (item.Value.isEquipped)
+        //            {
+        //                item.Value.Equipped();
+        //            }
+        //        }
+        //        inventory.Add(item);
+        //    }
 
-            for (int i = 0; i < weaponEqu.Length; i++)
-            {
-                EquipItem? item = weaponEqu[i];
+        //    for (int i = 0; i < weaponEqu.Length; i++)
+        //    {
+        //        EquipItem? item = weaponEqu[i];
 
-                if (item != null)
-                {
-                    if (item.Value.isEquipped)
-                    {
-                        item.Value.Equipped();
-                    }
-                }
-                inventory.Add(item);
-            }
+        //        if (item != null)
+        //        {
+        //            if (item.Value.isEquipped)
+        //            {
+        //                item.Value.Equipped();
+        //            }
+        //        }
+        //        inventory.Add(item);
+        //    }
 
 
-        }
+        //}
 
         public void IncreaseDamageAndArmor(float damage,int armor)
         {
             increaseInDamage += damage;
             increaseInArmor += armor;
         }
-        public void RemoveList(int idx)
-        {
-            inventory.Remove(idx);
-        }
+        //public void RemoveList(int idx)
+        //{
+        //    inventory.Remove(idx);
+        //}
         public void DungeonClearFail()
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -282,4 +282,5 @@ namespace TextRPG
     }
     
 }
+
 

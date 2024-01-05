@@ -71,6 +71,30 @@ namespace TextRPG
         }
 
 
+        public void FindTextChangeColorGreen(string mainText,string findText)
+        {
+            int stringIdx = mainText.ToString().IndexOf(findText);
+            int findTextLen = findText.Length;
+            if(stringIdx != -1)
+            {
+              foreach(char c in mainText)
+                {
+                    if(findTextLen > 0)
+                    {
+                        GreenText(c.ToString());
+                        findTextLen--;
+                    }
+                    else
+                    {
+                    Console.Write(c);
+                    }
+                }
+            }
+            else
+            {
+                Console.Write(mainText);
+            }
+        }
 
         public void TextAnimation(string str,int animationSpeed)
         {
